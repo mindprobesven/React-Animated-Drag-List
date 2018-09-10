@@ -32,7 +32,7 @@ Start an Express web server locally to run the production version
 npm run server
 ```
 
-### [Live Demo](https://www.mindprobe.io/demo/draglist32/)
+### [Live Demo >>](https://www.mindprobe.io/demo/react-animated-drag-list/)
 
 * * *
 
