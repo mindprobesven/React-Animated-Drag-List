@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Component } from 'react'
 import Item from './Item'
+import OptionsMenu from '../../components/OptionsMenu'
 import '../styles.scss'
 
 interface IProps {
@@ -300,11 +301,22 @@ class DragOrderList extends Component<IProps, IState> {
     })
   }
 
+  onHandleAddItem = () => {
+    this.addItem('Some Added Item', `Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+    Curabitur consectetur arcu libero, at lobortis lectus consectetur auctor.`)
+  }
+
   addItem = (headline: string, body: string) => {
     const { itemsById: items, idsByOrder } = this.state
 
     let itemToAdd: any = {}
-    const itemId = Math.max.apply(null, idsByOrder) + 1
+    let itemId: number
+
+    if(idsByOrder.length > 0) {
+      itemId = Math.max.apply(null, idsByOrder) + 1
+    } else {
+      itemId = 0
+    }
 
     const itemData: ItemState = {
       id: itemId,
@@ -454,33 +466,36 @@ class DragOrderList extends Component<IProps, IState> {
     const { itemsById: items, idsByOrder, itemToMove } = this.state
 
     return (
-      <div className="container">
-        <div className="list" 
-          ref={this.listElement}
-          onMouseDown={this.mouseDown} 
-          onMouseUp={this.mouseUp} 
-          onMouseLeave={this.mouseLeave} 
-          onMouseMove={this.mouseMove}
-          onTouchStart={this.touchStart}
-          onTouchEnd={this.touchEnd}
-          onTouchMove={this.touchMove}
-        >
-          {idsByOrder.length === 0 && <h3 className="list-message">Add some items...</h3>}
-          {idsByOrder.length > 0 && idsByOrder.map((id: number) => {
-            return <Item 
-            key={id} 
-            ref={items[id].itemRef} 
-            id={id}
-            headline={items[id].headline} 
-            body={items[id].body} 
-            movedY={items[id].movedY} 
-            posY={items[id].y}
-            height={items[id].height}
-            isMove={itemToMove === id ? true : false}
-            blockTransition={items[id].blockTransition}
-            onDelete={(id) => this.onHandleDeleteItem(id)}
-            />
-          })}
+      <div>
+        <OptionsMenu onAdd={() => this.onHandleAddItem()} />
+        <div className="container">
+          <div className="list" 
+            ref={this.listElement}
+            onMouseDown={this.mouseDown} 
+            onMouseUp={this.mouseUp} 
+            onMouseLeave={this.mouseLeave} 
+            onMouseMove={this.mouseMove}
+            onTouchStart={this.touchStart}
+            onTouchEnd={this.touchEnd}
+            onTouchMove={this.touchMove}
+          >
+            {idsByOrder.length === 0 && <h3 className="list-message">Add some items...</h3>}
+            {idsByOrder.length > 0 && idsByOrder.map((id: number) => {
+              return <Item 
+              key={id} 
+              ref={items[id].itemRef} 
+              id={id}
+              headline={items[id].headline} 
+              body={items[id].body} 
+              movedY={items[id].movedY} 
+              posY={items[id].y}
+              height={items[id].height}
+              isMove={itemToMove === id ? true : false}
+              blockTransition={items[id].blockTransition}
+              onDelete={(id) => this.onHandleDeleteItem(id)}
+              />
+            })}
+          </div>
         </div>
       </div>
     )

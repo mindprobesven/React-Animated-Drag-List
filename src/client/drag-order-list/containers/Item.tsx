@@ -33,10 +33,10 @@ class Item extends Component<IProps> {
 
     const itemTransition = isMove || blockTransition ? 
     `transform 0ms ease-out,
-    background-color 500ms ease`
+    background-color 250ms ease`
     : 
     `transform 250ms ease-out,
-    background-color 500ms ease`
+    background-color 250ms ease`
 
     return (
       <div className={isMove ? 'item move' : 'item'} ref={this.ref} style={{
@@ -46,7 +46,7 @@ class Item extends Component<IProps> {
         opacity: isMove && 0.75
       }}>
         <div className="item-content">
-          <h3 className="headline">{id} - {headline}</h3>
+          <h3 className="headline">ID: {id} - {headline}</h3>
           <p className="body-text">{body}</p>
         </div>
         <div className="button-delete" onClick={() => onDelete(id)}>
