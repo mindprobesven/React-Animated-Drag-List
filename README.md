@@ -1,5 +1,7 @@
 # [React Animated Drag List](https://reactjs.org/) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/facebook/react/blob/master/LICENSE)
 
+React + TypeScript + SASS | < 5 KBs Size (minified) | Chrome (stable) - Safari (untested)
+
 A re-usable and responsive list component with the functionality to re-order items by dragging them vertically. Supports both touch and mouse events. Highly efficient with requestAnimationFrame, debouncing and no absolute positioning.
 
 * * *
@@ -21,3 +23,11 @@ Build minified production version with Webpack
 ```sh
 npm run build
 ```
+
+Start an Express web server locally to run the production version
+
+```sh
+npm run server
+```
+
+### [Live Demo](https://www.mindprobe.io/demo/draglist32/)
