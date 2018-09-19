@@ -13,7 +13,7 @@ module.exports = {
   }, 
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Animated Drag List v0.2 by Sven Kohn',
+      title: 'React Animated Drag List v0.21 BETA by Sven Kohn',
       filename: 'index.html',
       path: path.resolve(__dirname, 'dist'),
       template: './src/client/index.html'

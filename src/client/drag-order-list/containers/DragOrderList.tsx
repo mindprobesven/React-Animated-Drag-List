@@ -71,6 +71,13 @@ class DragOrderList extends Component<IProps, IState> {
     this.bodyElement.addEventListener('touchmove', this.preventPageScrolling, { passive: false })
   }
 
+  shouldComponentUpdate(nextProps: IProps, nextState: IState) {
+    if(nextState !== this.state) {
+      return true
+    }
+    return false
+  }
+
   componentDidUpdate(prevProps: IProps, prevState: IState) {
     if(prevState !== this.state) {
       if(this.state.updateCoordinates === true) {

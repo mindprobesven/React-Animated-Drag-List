@@ -14,6 +14,15 @@ interface IProps {
 }
 
 class Item extends Component<IProps> {
+  shouldComponentUpdate(nextProps: IProps) { 
+    if(nextProps.movedY !== this.props.movedY ||
+      nextProps.isMove !== this.props.isMove ||
+      nextProps.blockTransition !== this.props.blockTransition) {
+      return true
+    }
+    return false
+  }
+  
   private ref = React.createRef<HTMLDivElement>()
 
   getHeight() {
