@@ -13,7 +13,7 @@ module.exports = {
   }, 
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'React Animated Drag List v0.21 BETA by Sven Kohn',
+      title: 'React Animated Drag List v0.25 BETA by Sven Kohn',
       filename: 'index.html',
       path: path.resolve(__dirname, 'dist'),
       template: './src/client/index.html'
@@ -25,6 +25,12 @@ module.exports = {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         loader: 'awesome-typescript-loader'
+      },
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        enforce: 'pre',
+        loader: 'tslint-loader'
       },
       { 
         enforce: 'pre', 

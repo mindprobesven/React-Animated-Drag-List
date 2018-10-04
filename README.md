@@ -2,7 +2,7 @@
 
 React + TypeScript + SASS | < 15 KBs (minified) | Chrome (stable) - Safari (untested)
 
-Responsive animated list component with the functionality to re-order items by dragging them vertically. Supports both touch and mouse events. Smooth animations using requestAnimationFrame, debouncing and no absolute positioning. Refactored and readable source code with static typing. Highly optimized using a single action listener and shouldComponentUpdate hook. Includes Jest / Enzyme unit test.
+Responsive animated list component with the functionality to re-order items by dragging them vertically. Supports both touch and mouse events. Smooth animations using requestAnimationFrame, debouncing and no absolute positioning. Refactored and readable source code with static typing. Highly optimized using a single action listener and shouldComponentUpdate hook. Includes Jest / Enzyme unit test. Quality standards are forced using TSLint and the Airbnb config.
 
 * * *
 

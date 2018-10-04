@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Component } from 'react'
+const { Component } = React
 import Item from './Item'
 import OptionsMenu from '../../components/OptionsMenu'
 import '../styles.scss'
@@ -35,7 +35,7 @@ class DragOrderList extends Component<IProps, IState> {
     itemToMove: null,
     moveY: 0,
     itemsById: {},
-    idsByOrder: []
+    idsByOrder: [],
   }
 
   private animationFrameMouse: number
@@ -43,14 +43,14 @@ class DragOrderList extends Component<IProps, IState> {
   private lastMousePosition: number = 0
   private moveDirection: string
   private listElement: React.RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>()
-  private listCoordinates: { top: number, bottom: number } = { top: 0, bottom: 0}
+  private listCoordinates: { top: number, bottom: number } = { top: 0, bottom: 0 }
   private lastItemHit: string
   private itemMarginBottom: number = 0
   private lastMoveDirection: string
   private bodyElement: HTMLBodyElement
   private animationFrameResize: number
   private resizeTimout: number
-  
+
   // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   // Lifecycle hooks
   // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -60,7 +60,7 @@ class DragOrderList extends Component<IProps, IState> {
     console.log('All systems are go!')
 
     const { initialItemsData } = this.props
-    
+
     initialItemsData && this.setInitialItemsData()
 
     this.bodyElement = document.getElementsByTagName('body')[0]
@@ -72,20 +72,20 @@ class DragOrderList extends Component<IProps, IState> {
   }
 
   shouldComponentUpdate(nextProps: IProps, nextState: IState) {
-    if(nextState !== this.state) {
+    if (nextState !== this.state) {
       return true
     }
     return false
   }
 
   componentDidUpdate(prevProps: IProps, prevState: IState) {
-    if(prevState !== this.state) {
-      if(this.state.updateCoordinates === true) {
+    if (prevState !== this.state) {
+      if (this.state.updateCoordinates === true) {
         this.updateItemsCoordinates()
         this.updateListCoordinates()
       }
-      
-      if(prevState.moveY !== this.state.moveY) {
+
+      if (prevState.moveY !== this.state.moveY) {
         this.handleItemMovement(prevState.moveY)
       }
     }
@@ -112,42 +112,43 @@ class DragOrderList extends Component<IProps, IState> {
     clearTimeout(this.resizeTimout)
     this.resizeTimout = window.setTimeout(() => {
       this.setState({
-        updateCoordinates: true
+        updateCoordinates: true,
       })
     }, 200)
     cancelAnimationFrame(this.animationFrameResize)
   }
 
   preventPageScrolling = (e: any) => {
-    if(this.state.isMouseDown) {
-      e.preventDefault();
-    }  
+    if (this.state.isMouseDown) {
+      e.preventDefault()
+    }
   }
 
   updateItemsCoordinates = () => {
     const { itemsById: items, idsByOrder } = this.state
 
-    const updatedItems = {...items}
+    const updatedItems = { ...items }
 
-    let firstItemId = idsByOrder[0]
-    if(firstItemId >= 0) {
+    const firstItemId = idsByOrder[0]
+    if (firstItemId >= 0) {
       const element = updatedItems[firstItemId].itemRef.current!.getElement()
       const marginBottomValue = window.getComputedStyle(element, null).getPropertyValue('margin-bottom')
-      this.itemMarginBottom = parseInt(marginBottomValue)
+      this.itemMarginBottom = parseInt(marginBottomValue, 10)
     }
 
-    for(const id in updatedItems) { 
-      updatedItems[id] = {...updatedItems[id], 
+    for (const id in updatedItems) {
+      updatedItems[id] = {
+        ...updatedItems[id],
         y: updatedItems[id].itemRef.current!.getTop(),
         height: updatedItems[id].itemRef.current!.getHeight(),
         movedY: 0,
-        blockTransition: false
+        blockTransition: false,
       }
     }
 
     this.setState({
-      itemsById: {...items, ...updatedItems},
-      updateCoordinates: false
+      itemsById: { ...items, ...updatedItems },
+      updateCoordinates: false,
     })
   }
 
@@ -156,25 +157,25 @@ class DragOrderList extends Component<IProps, IState> {
     this.listCoordinates.bottom = this.listElement.current!.getBoundingClientRect().bottom
   }
 
-  updateItemsOrder= () => {
+  updateItemsOrder = () => {
     const { moveY, itemToMove, itemsById: items, isMouseDown } = this.state
-    const currentItems = {...items}
-    
-    if(moveY !== 0 && isMouseDown === true && itemToMove >= 0) {
-      if(this.moveDirection === 'up') {
-        if(this.lastItemHit !== undefined) {
-          currentItems[itemToMove].y = currentItems[parseInt(this.lastItemHit)].y - 1
+    const currentItems = { ...items }
+
+    if (moveY !== 0 && isMouseDown === true && itemToMove >= 0) {
+      if (this.moveDirection === 'up') {
+        if (this.lastItemHit !== undefined) {
+          currentItems[itemToMove].y = currentItems[parseInt(this.lastItemHit, 10)].y - 1
         }
-      } else if(this.moveDirection === 'down') {
+      } else if (this.moveDirection === 'down') {
         currentItems[itemToMove].y = currentItems[itemToMove].y + moveY
       }
 
       let itemIdsWithPosY: object[] = []
-      for(const id in currentItems) {
-        itemIdsWithPosY = [...itemIdsWithPosY, { id: parseInt(id), y: currentItems[id].y }]
-        currentItems[id] = {...currentItems[id], 
-          movedY: 0, 
-          blockTransition: true
+      for (const id in currentItems) {
+        itemIdsWithPosY = [...itemIdsWithPosY, { id: parseInt(id, 10), y: currentItems[id].y }]
+        currentItems[id] = {...currentItems[id],
+          movedY: 0,
+          blockTransition: true,
         }
       }
 
@@ -190,12 +191,12 @@ class DragOrderList extends Component<IProps, IState> {
         itemToMove: null,
         idsByOrder: newOrderedIds,
         itemsById: currentItems,
-        updateCoordinates: true
+        updateCoordinates: true,
       })
     } else {
       this.setState({
         isMouseDown: false,
-        itemToMove: null
+        itemToMove: null,
       })
     }
   }
@@ -205,7 +206,7 @@ class DragOrderList extends Component<IProps, IState> {
   // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   getMoveDirection = (currentMoveY: number, prevMoveY: number): string => {
-    switch(true) {
+    switch (true) {
       case currentMoveY > prevMoveY:
         return 'down'
       case currentMoveY < prevMoveY:
@@ -220,40 +221,40 @@ class DragOrderList extends Component<IProps, IState> {
 
     this.moveDirection = this.getMoveDirection(moveY, prevMoveY)
 
-    const updatedItems = {...items}
+    const updatedItems = { ...items }
     const moveItemPosY = updatedItems[itemToMove].y + moveY
     const moveItemHeight = updatedItems[itemToMove].height + this.itemMarginBottom
-    
-    for(const id in updatedItems) {
-      if(parseInt(id) !== itemToMove) {
+
+    for (const id in updatedItems) {
+      if (parseInt(id, 10) !== itemToMove) {
         const currentItemPosY = updatedItems[id].y
         const currentItemHeight = updatedItems[id].height + this.itemMarginBottom
 
-        if(this.moveDirection === 'up') {
-          if(moveItemPosY > currentItemPosY && moveItemPosY < currentItemPosY + (currentItemHeight - this.itemMarginBottom - 10)) {
-            if(this.lastItemHit !== id || this.lastMoveDirection !== this.moveDirection) {          
-              if(updatedItems[id].movedY < 0) {
+        if (this.moveDirection === 'up') {
+          if (moveItemPosY > currentItemPosY && moveItemPosY < currentItemPosY + (currentItemHeight - this.itemMarginBottom - 10)) {
+            if (this.lastItemHit !== id || this.lastMoveDirection !== this.moveDirection) {
+              if (updatedItems[id].movedY < 0) {
                 updatedItems[id].movedY = 0
                 updatedItems[id].y = currentItemPosY + moveItemHeight
                 this.lastItemHit = id
-              } else if(updatedItems[id].movedY === 0) {
+              } else if (updatedItems[id].movedY === 0) {
                 updatedItems[id].movedY = moveItemHeight
                 updatedItems[id].y = currentItemPosY + moveItemHeight
                 this.lastItemHit = id
               }
             }
-            this.lastMoveDirection = this.moveDirection               
+            this.lastMoveDirection = this.moveDirection
             break
           }
-        } else if(this.moveDirection === 'down') {
-          if((moveItemPosY + moveItemHeight) < (currentItemPosY + currentItemHeight) && 
+        } else if (this.moveDirection === 'down') {
+          if ((moveItemPosY + moveItemHeight) < (currentItemPosY + currentItemHeight) &&
           (moveItemPosY + moveItemHeight) > (currentItemPosY + this.itemMarginBottom + 10)) {
-            if(this.lastItemHit !== id || this.lastMoveDirection !== this.moveDirection) {          
-              if(updatedItems[id].movedY > 0) {
+            if (this.lastItemHit !== id || this.lastMoveDirection !== this.moveDirection) {
+              if (updatedItems[id].movedY > 0) {
                 updatedItems[id].movedY = 0
                 updatedItems[id].y = currentItemPosY - moveItemHeight
                 this.lastItemHit = id
-              } else if(updatedItems[id].movedY === 0) {
+              } else if (updatedItems[id].movedY === 0) {
                 updatedItems[id].movedY = -moveItemHeight
                 updatedItems[id].y = currentItemPosY - moveItemHeight
                 this.lastItemHit = id
@@ -267,7 +268,7 @@ class DragOrderList extends Component<IProps, IState> {
     }
 
     this.setState({
-      itemsById: updatedItems
+      itemsById: updatedItems,
     })
   }
 
@@ -279,12 +280,13 @@ class DragOrderList extends Component<IProps, IState> {
     const { initialItemsData } = this.props
     const { itemsById: items, idsByOrder } = this.state
 
-    let itemsToAdd: any = {}
+    const itemsToAdd: any = {}
     let newItemIds: number[] = []
     let itemCounter: number = idsByOrder.length
 
     initialItemsData.map((item: any) => {
-      const itemId = itemCounter++
+      itemCounter = itemCounter + 1
+      const itemId = itemCounter
 
       const itemData: ItemState = {
         id: itemId,
@@ -292,54 +294,54 @@ class DragOrderList extends Component<IProps, IState> {
         body: item.body,
         movedY: 0,
         blockTransition: false,
-        itemRef: React.createRef<Item>()
+        itemRef: React.createRef<Item>(),
       }
 
       itemsToAdd[itemId] = itemData
       newItemIds = [...newItemIds, itemId]
     })
-    
-    const newOrderedIds = [...idsByOrder, ...newItemIds].sort((a,b) => b - a)
+
+    const newOrderedIds = [...idsByOrder, ...newItemIds].sort((a, b) => b - a)
 
     this.setState({
-      itemsById: {...items, ...itemsToAdd},
+      itemsById: { ...items, ...itemsToAdd },
       idsByOrder: newOrderedIds,
-      updateCoordinates: true
+      updateCoordinates: true,
     })
   }
 
   onHandleAddItem = () => {
-    this.addItem('Some Added Item', `Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+    this.addItem('Some Added Item', `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
     Curabitur consectetur arcu libero, at lobortis lectus consectetur auctor.`)
   }
 
   addItem = (headline: string, body: string) => {
     const { itemsById: items, idsByOrder } = this.state
 
-    let itemToAdd: any = {}
+    const itemToAdd: any = {}
     let itemId: number
 
-    if(idsByOrder.length > 0) {
+    if (idsByOrder.length > 0) {
       itemId = Math.max.apply(null, idsByOrder) + 1
     } else {
       itemId = 0
     }
 
     const itemData: ItemState = {
-      id: itemId,
       headline,
       body,
+      id: itemId,
       movedY: 0,
       blockTransition: false,
-      itemRef: React.createRef<Item>()
+      itemRef: React.createRef<Item>(),
     }
 
     itemToAdd[itemId] = itemData
 
     this.setState({
-      itemsById: {...items, ...itemToAdd},
+      itemsById: { ...items, ...itemToAdd },
       idsByOrder: [itemId, ...idsByOrder],
-      updateCoordinates: true
+      updateCoordinates: true,
     })
   }
 
@@ -350,20 +352,20 @@ class DragOrderList extends Component<IProps, IState> {
   deleteItem = (itemId: number) => {
     const { itemsById: items, idsByOrder } = this.state
 
-    const filteredItems = {...items}
+    const filteredItems = { ...items }
     delete filteredItems[itemId]
 
     const filteredIds = [...idsByOrder]
     const arrayIndex = filteredIds.findIndex(arrayItemId => arrayItemId === itemId)
     filteredIds.splice(arrayIndex, 1)
-    
+
     this.setState({
       itemsById: filteredItems,
       idsByOrder: filteredIds,
-      updateCoordinates: true
+      updateCoordinates: true,
     })
   }
-  
+
   // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   // Mouse and touch event handlers
   // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -374,20 +376,20 @@ class DragOrderList extends Component<IProps, IState> {
 
     this.lastMousePosition = e.clientY
   }
-  
+
   touchMove = (e: React.TouchEvent<HTMLDivElement>) => {
     e.stopPropagation()
- 
+
     this.lastMousePosition = e.touches[0].clientY
   }
 
   mouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     e.preventDefault()
-    
+
     this.handleDown(e, 'mouseDown')
   }
-  
+
   touchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     e.stopPropagation()
 
@@ -397,42 +399,42 @@ class DragOrderList extends Component<IProps, IState> {
   handleDown = (e: any, type: string) => {
     const itemId = (e.target as HTMLDivElement).getAttribute('data-id')
 
-    if(itemId && typeof itemId === 'string') {
+    if (itemId && typeof itemId === 'string') {
       this.setState({
         isMouseDown: true,
-        itemToMove: parseInt(itemId)
+        itemToMove: parseInt(itemId, 10),
       })
 
-      if(type === 'touchStart') {
+      if (type === 'touchStart') {
         this.startMousePosition = e.touches[0].clientY
       } else if (type === 'mouseDown') {
         this.startMousePosition = e.clientY
       }
-      
+
       this.lastMousePosition = this.startMousePosition
       this.animationFrameMouse = requestAnimationFrame(this.updateMousePosition)
     }
   }
 
-  updateMousePosition = () => {  
+  updateMousePosition = () => {
     const { isMouseDown, itemToMove, itemsById: items } = this.state
-    
-    if(isMouseDown && itemToMove >= 0) {
-      let moveY = this.lastMousePosition - this.startMousePosition
 
-      const updatedItems = {...items}
-      
-      if((updatedItems[itemToMove].y + moveY) >= this.listCoordinates.top &&
+    if (isMouseDown && itemToMove >= 0) {
+      const moveY = this.lastMousePosition - this.startMousePosition
+
+      const updatedItems = { ...items }
+
+      if ((updatedItems[itemToMove].y + moveY) >= this.listCoordinates.top &&
       ((updatedItems[itemToMove].y + updatedItems[itemToMove].height) + moveY) <= this.listCoordinates.bottom) {
         updatedItems[itemToMove].movedY = moveY
-  
-        this.setState({ 
+
+        this.setState({
+          moveY,
           itemsById: updatedItems,
-          moveY
-        })   
+        })
       }
     }
-    
+
     this.animationFrameMouse = requestAnimationFrame(this.updateMousePosition)
   }
 
@@ -442,10 +444,10 @@ class DragOrderList extends Component<IProps, IState> {
 
     this.handleUp()
   }
-  
+
   touchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
     e.stopPropagation()
-    
+
     this.handleUp()
   }
 
@@ -460,7 +462,7 @@ class DragOrderList extends Component<IProps, IState> {
     e.stopPropagation()
     e.preventDefault()
 
-    if(this.state.isMouseDown) {
+    if (this.state.isMouseDown) {
       this.handleUp()
     }
   }
@@ -472,36 +474,39 @@ class DragOrderList extends Component<IProps, IState> {
   render() {
     const { itemsById: items, idsByOrder, itemToMove } = this.state
 
+    const itemsList = idsByOrder.length > 0 && idsByOrder.map((id: number) => (
+      <Item
+        key={id}
+        ref={items[id].itemRef}
+        id={id}
+        headline={items[id].headline}
+        body={items[id].body}
+        movedY={items[id].movedY}
+        posY={items[id].y}
+        height={items[id].height}
+        isMove={itemToMove === id ? true : false}
+        blockTransition={items[id].blockTransition}
+        onDelete={this.onHandleDeleteItem}
+      />
+    ))
+
     return (
       <div>
-        <OptionsMenu onAdd={() => this.onHandleAddItem()} />
+        <OptionsMenu onAdd={this.onHandleAddItem} />
         <div className="container">
-          <div className="list" 
+          <div
+            className="list"
             ref={this.listElement}
-            onMouseDown={this.mouseDown} 
-            onMouseUp={this.mouseUp} 
-            onMouseLeave={this.mouseLeave} 
+            onMouseDown={this.mouseDown}
+            onMouseUp={this.mouseUp}
+            onMouseLeave={this.mouseLeave}
             onMouseMove={this.mouseMove}
             onTouchStart={this.touchStart}
             onTouchEnd={this.touchEnd}
             onTouchMove={this.touchMove}
           >
             {idsByOrder.length === 0 && <h3 className="list-message">Add some items...</h3>}
-            {idsByOrder.length > 0 && idsByOrder.map((id: number) => {
-              return <Item 
-              key={id} 
-              ref={items[id].itemRef} 
-              id={id}
-              headline={items[id].headline} 
-              body={items[id].body} 
-              movedY={items[id].movedY} 
-              posY={items[id].y}
-              height={items[id].height}
-              isMove={itemToMove === id ? true : false}
-              blockTransition={items[id].blockTransition}
-              onDelete={(id) => this.onHandleDeleteItem(id)}
-              />
-            })}
+            {idsByOrder.length > 0 && itemsList}
           </div>
         </div>
       </div>

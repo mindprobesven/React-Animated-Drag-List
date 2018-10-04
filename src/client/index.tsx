@@ -7,6 +7,6 @@ import './index.scss'
 setTimeout(() => {
   render(
     <Root />,
-    document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement,
   )
 }, 50)
